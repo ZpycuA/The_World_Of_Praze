@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praze 图集 — by ZpycuA</title>
+<style>
+:root {
+    --bg: #f6f2ec;
+    --sidebar-bg: #1a1a2e;
+    --sidebar-text: #cdd1d9;
+    --accent: #8b6f47;
+    --accent-light: #c9a96e;
+    --card-bg: #fffefb;
+    --card-border: #e0d8cc;
+    --text: #2c2c2c;
+    --text-muted: #6b6560;
+    --code-bg: #f0ebe3;
+    --link: #7a5c32;
+    --details-bg: #faf7f2;
+    --details-border: #d8cdbb;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: "Noto Serif SC", "Source Han Serif SC", "Georgia", "Times New Roman", serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 15.5px;
+}
+
+/* ---------- 顶栏 ---------- */
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 28px;
+    background: var(--sidebar-bg);
+    color: #eee;
+    border-bottom: 3px solid var(--accent);
+    flex-wrap: wrap;
+}
+
+.topbar h1 {
+    font-size: 1.25rem;
+    margin: 0;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.topbar .subtitle {
+    font-size: 0.8rem;
+    color: #aaa;
+    letter-spacing: 1px;
+}
+
+.topbar .count {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--accent-light);
+    letter-spacing: 2px;
+    white-space: nowrap;
+}
+
+/* ---------- 主体 ---------- */
+.wrap {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 36px 48px 60px 48px;
+}
+
+.intro {
+    border-bottom: 3px double var(--accent);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+}
+
+.intro h2 {
+    font-size: 1.45rem;
+    border-left: 4px solid var(--accent);
+    padding-left: 14px;
+    margin: 0 0 10px 0;
+    color: #2a241e;
+    letter-spacing: 1px;
+}
+
+.intro p {
+    margin: 0;
+    font-size: 0.86rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+}
+
+/* ---------- 网格 ---------- */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+
+.card:hover,
+.card:focus-visible {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 26px rgba(80,60,30,0.16);
+    border-color: var(--accent-light);
+    outline: none;
+}
+
+.card .thumb {
+    aspect-ratio: 4 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    background: linear-gradient(135deg, #f2ede5, #e6ddcf);
+    overflow: hidden;
+}
+
+.card .thumb img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    box-shadow: 0 2px 10px rgba(60,45,25,0.12);
+    transition: transform 0.45s cubic-bezier(.2,.8,.3,1);
+}
+
+.card:hover .thumb img { transform: scale(1.045); }
+
+.thumb-fallback {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 1px;
+}
+
+.card figcaption {
+    padding: 12px 16px 14px 16px;
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.card .fname {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2a241e;
+    letter-spacing: 1px;
+    word-break: break-all;
+}
+
+.card .fid {
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 0.5px;
+    word-break: break-all;
+}
+
+.empty {
+    grid-column: 1 / -1;
+    padding: 40px 24px;
+    background: var(--card-bg);
+    border: 1px dashed var(--card-border);
+    border-radius: 10px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 2;
+}
+
+/* ---------- 灯箱 ---------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.lightbox.open { display: flex; }
+
+.lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(20, 18, 30, 0.82);
+    backdrop-filter: blur(4px);
+}
+
+.lb-panel {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, 100%);
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+}
+
+.lb-body {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+}
+
+.lb-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: #14121e;
+    min-height: 260px;
+}
+
+.lb-img img {
+    max-width: 100%;
+    max-height: 68vh;
+    display: block;
+    border-radius: 3px;
+}
+
+.lb-meta {
+    padding: 24px 24px 28px 24px;
+    border-left: 1px solid var(--card-border);
+    background: var(--details-bg);
+}
+
+.lb-meta h3 {
+    margin: 0 0 4px 0;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    color: #2a241e;
+    word-break: break-all;
+}
+
+.lb-sub {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 18px;
+}
+
+.meta-row {
+    border-top: 1px solid var(--details-border);
+    padding: 10px 0;
+}
+
+.meta-row dt {
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+}
+
+.meta-row dd {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--text);
+    word-break: break-all;
+}
+
+.meta-row dd.mono {
+    font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+    font-size: 0.7rem;
+    line-height: 1.65;
+    color: #5a4632;
+}
+
+.meta-row dd a {
+    color: var(--link);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+}
+
+.meta-row dd a:hover { color: #b8860b; }
+
+.lb-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 3;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--card-border);
+    background: rgba(255,255,255,0.92);
+    color: #4a3f31;
+    font-size: 1.15rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.lb-close:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+}
+
+.lb-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(20,18,30,0.55);
+    color: #eee;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.lb-nav:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.lb-prev { left: 16px; }
+.lb-next { right: 16px; }
+
+/* ---------- 页脚 ---------- */
+.site-footer {
+    padding: 8px 48px 56px 48px;
+    text-align: center;
+    font-size: 0.74rem;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.site-footer a {
+    color: var(--link);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 900px) {
+    .wrap { padding: 22px 16px 40px 16px; }
+    .topbar { padding: 10px 16px; }
+    .topbar h1 { font-size: 1rem; }
+    .topbar .subtitle { display: none; }
+    .site-footer { padding: 8px 16px 44px 16px; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 14px; }
+    .lb-body { grid-template-columns: 1fr; }
+    .lb-meta { border-left: none; border-top: 1px solid var(--card-border); }
+    .lb-img { padding: 14px; }
+    .lb-img img { max-height: 52vh; }
+    .lb-nav { width: 38px; height: 38px; font-size: 1.25rem; }
+    .lb-prev { left: 8px; }
+    .lb-next { right: 8px; }
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+    <h1>Praze 图集</h1>
+    <span class="subtitle">by ZpycuA,this work is licensed under CC BY-NC 4.0.</span>
+    <span class="count" id="count">共 — 件</span>
+</header>
+
+<main class="wrap">
+    <section class="intro">
+        <h2>Gallery</h2>
+        <p>本页作品均嵌入数字水印与版权标识，点击任意图片可查看其编号、哈希与发布时间。</p>
+    </section>
+
+    <div class="grid" id="grid"></div>
+</main>
+
+<footer class="site-footer">
+    <p>Copyright © 2026 ZpycuA. All rights reserved. · This work is licensed under CC BY-NC 4.0.</p>
+</footer>
+
+<!-- 灯箱 -->
+<div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="作品详情">
+    <div class="lb-backdrop" data-close></div>
+
+    <button class="lb-nav lb-prev" data-prev aria-label="上一件">‹</button>
+    <button class="lb-nav lb-next" data-next aria-label="下一件">›</button>
+
+    <div class="lb-panel">
+        <button class="lb-close" data-close aria-label="关闭">×</button>
+        <div class="lb-body">
+            <div class="lb-img"><img id="lbImg" alt=""></div>
+            <div class="lb-meta">
+                <h3 id="lbTitle"></h3>
+                <div class="lb-sub">Digital Asset Record</div>
+                <dl id="lbMeta"></dl>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    'use strict';
+
+    var grid    = document.getElementById('grid');
+    var countEl = document.getElementById('count');
+    var lb      = document.getElementById('lightbox');
+    var lbImg   = document.getElementById('lbImg');
+    var lbTitle = document.getElementById('lbTitle');
+    var lbMeta  = document.getElementById('lbMeta');
+
+    var items = [];
+    var current = -1;
+
+    /* ---------- 工具函数 ---------- */
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
+    // 去掉文件名末尾的 _wm 标记，仅用于展示
+    function cleanName(f) {
+        return String(f || '').replace(/_wm(?=\.[^.]+$)/i, '');
+    }
+
+    function fmtDate(s) {
+        if (!s) return '—';
+        var d = new Date(s);
+        if (isNaN(d.getTime())) return String(s);
+        var p = function (n) { return String(n).padStart(2, '0'); };
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate()) +
+               ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+    }
+
+    function imgSrc(file) {
+        return encodeURI('./' + String(file).replace(/^\.?\//, ''));
+    }
+
+    /* ---------- 渲染网格 ---------- */
+    function renderGrid() {
+        if (!items.length) {
+            grid.innerHTML = '<p class="empty">imageList.json 中没有可展示的记录。</p>';
+            return;
+        }
+        grid.innerHTML = items.map(function (it, i) {
+            return '' +
+                '<figure class="card" data-index="' + i + '" tabindex="0" role="button" ' +
+                        'aria-label="查看 ' + esc(it.file) + ' 的版权信息">' +
+                    '<div class="thumb">' +
+                        '<img src="' + esc(imgSrc(it.file)) + '" alt="' + esc(it.file) + '" loading="lazy">' +
+                    '</div>' +
+                    '<figcaption>' +
+                        '<span class="fname">' + esc(cleanName(it.file)) + '</span>' +
+                        '<span class="fid">' + esc(it.id || '') + '</span>' +
+                    '</figcaption>' +
+                '</figure>';
+        }).join('');
+    }
+
+    /* ---------- 灯箱元数据 ---------- */
+    function metaRows(it) {
+        var rows = [
+            { label: '作品编号 / ID',        value: it.id,           mono: true },
+            { label: '文件名 / File',        value: it.file,         mono: true },
+            { label: 'SHA-256',              value: it.sha256,       mono: true },
+            { label: '嵌入时间 / Embedded',  value: fmtDate(it.embedded_at) },
+            { label: '发布地址 / Published',  html: it.published
+                    ? '<a href="' + esc(it.published) + '" target="_blank" rel="noopener">' +
+                      esc(it.published) + '</a>'
+                    : '' },
+            { label: '版权 / Copyright',     value: it.note }
+        ];
+        return rows.map(function (r) {
+            var body = (r.html != null) ? (r.html || '—') : esc(r.value || '—');
+            return '<div class="meta-row">' +
+                       '<dt>' + esc(r.label) + '</dt>' +
+                       '<dd class="' + (r.mono ? 'mono' : '') + '">' + body + '</dd>' +
+                   '</div>';
+        }).join('');
+    }
+
+    /* ---------- 打开 / 关闭 ---------- */
+    function openAt(i) {
+        if (i < 0 || i >= items.length) return;
+        current = i;
+        var it = items[i];
+
+        lbImg.src = imgSrc(it.file);
+        lbImg.alt = it.file;
+        lbTitle.textContent = cleanName(it.file);
+        lbMeta.innerHTML = metaRows(it);
+
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        lb.querySelector('.lb-panel').scrollTop = 0;
+    }
+
+    function close() {
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        current = -1;
+    }
+
+    function step(d) {
+        if (items.length < 2) return;
+        var n = current + d;
+        if (n < 0) n = items.length - 1;
+        if (n >= items.length) n = 0;
+        openAt(n);
+    }
+
+    /* ---------- 事件 ---------- */
+    grid.addEventListener('click', function (e) {
+        var card = e.target.closest('.card');
+        if (card) openAt(Number(card.dataset.index));
+    });
+
+    grid.addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        var card = e.target.closest('.card');
+        if (card) {
+            e.preventDefault();
+            openAt(Number(card.dataset.index));
+        }
+    });
+
+    // 图片加载失败时给出占位提示
+    grid.addEventListener('error', function (e) {
+        var el = e.target;
+        if (el && el.tagName === 'IMG') {
+            var ph = document.createElement('div');
+            ph.className = 'thumb-fallback';
+            ph.textContent = '图片未载入';
+            el.replaceWith(ph);
+        }
+    }, true);
+
+    lb.addEventListener('click', function (e) {
+        if (e.target.closest('[data-close]')) { close(); return; }
+        if (e.target.closest('[data-prev]'))  { step(-1); return; }
+        if (e.target.closest('[data-next]'))  { step(1); }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (!lb.classList.contains('open')) return;
+        if (e.key === 'Escape')     { close(); }
+        else if (e.key === 'ArrowLeft')  { step(-1); }
+        else if (e.key === 'ArrowRight') { step(1); }
+    });
+
+    /* ---------- 载入数据 ---------- */
+    function init() {
+        fetch('./imageList.json', { cache: 'no-cache' })
+            .then(function (res) {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
+            .then(function (data) {
+                if (!Array.isArray(data)) throw new Error('顶层不是数组');
+                items = data.filter(function (x) { return x && x.file; });
+                countEl.textContent = '共 ' + items.length + ' 件';
+                renderGrid();
+            })
+            .catch(function (err) {
+                countEl.textContent = '共 0 件';
+                grid.innerHTML = '<p class="empty">' +
+                    '无法读取 imageList.json（' + esc(err.message) + '）。<br>' +
+                    '请通过 GitHub Pages 等 HTTP 服务访问本页——' +
+                    '直接双击打开本地文件时，浏览器会拦截读取请求。' +
+                    '</p>';
+            });
+    }
+
+    init();
+})();
+</script>
+</body>
+</html>
