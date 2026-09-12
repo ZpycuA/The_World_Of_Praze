@@ -150,5 +150,21 @@
   "embedded_at": "2026-09-13T02:01:47+08:00",
   "published": "https://zpycua.github.io/The_World_Of_Praze/",
   "note": "Copyright © 2026 ZpycuA. All rights reserved."
+  },
+  {
+  "file": "PrazeComic1_wm.png",
+  "id": "ID-20260913-03N9",
+  "sha256": "e61e6f7fa629d12493abea566f7431b35a8d5c49df4f9e8f7528b2c35d5a3119",
+  "embedded_at": "2026-09-13T02:22:02+08:00",
+  "published": "https://zpycua.github.io/The_World_Of_Praze/",
+  "note": "Copyright © 2026 ZpycuA. All rights reserved."
+  },
+  {
+  "file": "PrazeComic2_wm.png",
+  "id": "ID-20260913-GSER",
+  "sha256": "0d7d5c2dda291078bc20cf0b74e2a5b31acc769f12ab5aa296e988374e505e3a",
+  "embedded_at": "2026-09-13T02:22:18+08:00",
+  "published": "https://zpycua.github.io/The_World_Of_Praze/",
+  "note": "Copyright © 2026 ZpycuA. All rights reserved."
   }
 ]
